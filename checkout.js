@@ -58,4 +58,33 @@ productsDiv.addEventListener("click", (e) => {
     }
 })
 
+const calculateProductAndCartTotal = (productInfoDiv) => {
+    console.log(productInfoDiv);
+    let productQuantity = productInfoDiv.querySelector("#product-quantity").innerText;
+    let productPrice = productInfoDiv.querySelector("strong").innerText;
+    let productTotalPriceDiv = productInfoDiv.querySelector(".product-line-price");
+    productTotalPriceDiv.innerText = (productQuantity * productPrice).toFixed(2);
 
+    calculateCartTotal();
+}
+
+const calculateCartTotal = () => {
+    let productTotalPriceDivs = document.querySelectorAll(".product-line-price");
+    // console.log(productTotalPriceDivs);
+    let subtotal = 0;
+    productTotalPriceDivs.forEach(eachProductTotalPriceDiv => {
+        subtotal += parseFloat(eachProductTotalPriceDiv.innerText)
+    });
+    console.log(subtotal);
+    let taxPrice = subtotal * localStorage.getItem("taxRate");
+    console.log(taxPrice);
+    let shipping = (subtotal > 0 ? parseFloat(localStorage.getItem("shippingPrice")) : 0);
+    console.log(shipping);
+    let cartTotal = subtotal + taxPrice + shipping;
+    console.log(cartTotal);
+
+    document.querySelector("#cart-subtotal p:nth-child(2)").innerText = subtotal.toFixed(2);
+    document.querySelector("#cart-tax p:nth-child(2)").innerText = taxPrice.toFixed(2);
+    document.querySelector("#cart-shipping p:nth-child(2)").innerText = shipping.toFixed(2);
+    document.querySelector("#cart-total").lastElementChild.innerText = cartTotal.toFixed(2);
+}
